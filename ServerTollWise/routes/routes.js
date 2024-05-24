@@ -233,6 +233,22 @@ router.post('/getWallet', async (req, res) => {
     }
 })
 
+router.post('/getUserData', async (req, res) => {
+    const { vehicleNumber } = req.body;
+    try {
+        const user = await userData.findOne({ vehicleNumber });
+        const vehicle = await vehicleDetails.findOne({ RegistrationNumber: vehicleNumber });
+        if (user && vehicle) {
+            res.status(200).json({ userDetails: user, vehicleDetails: vehicle });
+        } else {
+            res.status(401).json({ message: "Couldn't find user. Invalid credentials" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+
 router.use('/payment', paymentRoutes);
 
 module.exports = router;

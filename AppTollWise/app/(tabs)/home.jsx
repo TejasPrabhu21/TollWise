@@ -4,14 +4,15 @@ import { ScrollView, Text, View, RefreshControl, Image, TouchableOpacity, Modal,
 import { useVehicleContext } from '../contexts/VehicleContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { images } from "../../constants";
+import { icons, images } from "../../constants";
 import Header from "../../components/Header"
+import CustomButton from '../../components/CustomButton';
 
 
 const Home = () => {
     const { userData } = useVehicleContext();
-    const [transactions, setTransactions] = useState({})
-    const [walletBalance, setWalletBalance] = useState(0)
+    const [transactions, setTransactions] = useState({});
+    const [walletBalance, setWalletBalance] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -69,15 +70,36 @@ const Home = () => {
         setModalVisible(false);
     };
 
+    function rechargeRedirection() {
+
+    }
+
     return (
         <SafeAreaView className="flex-1">
-            <Header />
-
-            {walletBalance > 0 && (
-                <View className="bg-[#161622] border-gray-400 mt-3 mx-5 p-5 text-white rounded-xl">
-                    <Text className="text-3xl text-white">Balance</Text>
-                    <Text className="text-5xl pt-4 text-[#FFA001]">₹ {walletBalance}</Text>
+            {/*<Header />*/}
+            <View className="flex flex-row justify-left pt-4 px-5">
+                <View className="bg-black p-3 rounded-full"><Image
+                    source={icons.profile}
+                    resizeMode='contain'
+                    className="w-6 h-6"
+                /></View>
+                <View>
+                    <Text className="text-black text-sm font-plight px-2">Welcome,</Text>
+                    <Text className="text-black text-lg font-pmedium px-2">{data.username}</Text>
                 </View>
+            </View>
+            {walletBalance > 0 && (
+                <View className="bg-[#161622] border-gray-400 mt-3 mx-5 p-4 text-white rounded-xl">
+                    <Text className="text-2xl text-white font-pmedium">Wallet Balance</Text>
+                    <Text className="text-5xl pt-3 text-[#FFA001]">₹ {walletBalance}</Text>
+
+                    <View className="my-2 border-t border-gray-400"></View>
+
+                    <TouchableOpacity className="bg-[#FFA001] p-2 rounded-lg items-center">
+                        <Text className="text-white text-lg font-psemibold">Add Funds</Text>
+                    </TouchableOpacity>
+                </View>
+
             )}
             <ScrollView
                 contentContainerStyle={{ flexGrow: 1 }}

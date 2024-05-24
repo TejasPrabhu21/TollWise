@@ -15,7 +15,7 @@ const OTP = () => {
     const route = useRoute();
     const { details } = route.params;
     const navigation = useNavigation();
-    const { setVehicle } = useVehicleContext();
+    const { setUser, setVehicle } = useVehicleContext();
     const [OTP, setOTP] = useState("");
     const [isSubmitting, setSubmitting] = useState(false);
 
@@ -26,11 +26,14 @@ const OTP = () => {
                 otp: OTP,
                 phoneNumber: details.PhoneNumber,
             });
-            console.log(response.data);
+            const responseData = await axios.post('http://192.168.29.202:3030/user/getUserData', { vehicleNumber: details.RegistrationNumber });
+            console.log('\n\nResponse Data:', response.data);
             if (response.data.success) {
                 // Add vehicle data to global context or create a session
-                setVehicle(route.params);
-                // navigation.navigate('/home');
+                console.log('\n\nRouter params:', route.params);
+                // setVehicle(route.params.details);
+                setUser(responseData.data.userDetails);
+                setVehicle(responseData.data.vehicleDetails)
                 router.replace('/home');
             } else {
                 Alert.alert("Error", "Failed to verify OTP. Please try again.");

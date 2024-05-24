@@ -10,10 +10,10 @@ export const VehicleProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     const setVehicle = (data) => {
+        console.log('Vehicle data saved:', data)
         setVehicleData(data);
     };
     const setUser = (data) => {
-        console.log('User data saved:', data)
         setUserData(data);
     };
 

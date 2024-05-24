@@ -10,7 +10,7 @@ import { images } from '../../constants'
 import { useVehicleContext } from "../contexts/VehicleContext";
 
 const SignIn = () => {
-    const { setUser } = useVehicleContext();
+    const { setUser, setVehicle } = useVehicleContext();
 
     const [form, setForm] = useState({
         username: '',
@@ -32,10 +32,18 @@ const SignIn = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(response.data);
-            if (response.data && response.data.userDetails !== undefined) {
+            if (!response) {
+                console.error('Login error:', error);
+            }
+            const vehicleNumber = response.data.userDetails.vehicleNumber;
+
+            const responseData = await axios.post('http://192.168.29.202:3030/user/getUserData', { vehicleNumber });
+            console.log("Login response fetch", responseData);
+
+            if (response.data && responseData.data.userDetails !== undefined && responseData.data.vehicleDetails !== undefined) {
                 console.log('Login successful:', response.data.userDetails);
-                setUser(response.data.userDetails);
+                setUser(responseData.data.userDetails);
+                setVehicle(responseData.data.vehicleDetails)
                 router.push('/home');
             } else {
                 Alert.alert("Error", "Login failed. Please check your credentials or try again later.");
