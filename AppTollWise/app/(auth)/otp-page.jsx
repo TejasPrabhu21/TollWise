@@ -34,7 +34,7 @@ const OTP = () => {
                 // setVehicle(route.params.details);
                 setUser(responseData.data.userDetails);
                 setVehicle(responseData.data.vehicleDetails)
-                router.replace('/home');
+                router.replace('/payment-sheet');
             } else {
                 Alert.alert("Error", "Failed to verify OTP. Please try again.");
             }
