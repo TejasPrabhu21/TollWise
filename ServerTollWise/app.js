@@ -12,6 +12,8 @@ require('dotenv').config();
 
 const gpsRoutes = require('./routes/routes');
 const vehicleRouter = require('./routes/travelRoutes.routes.js');
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -164,6 +166,35 @@ app.post('/entryexitstatus', (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 })
+
+app.post("/pay", async (req, res) => {
+    try {
+        const { vehicleNumber } = req.body; // Destructure merchantDisplayName
+        const { amount } = req.body;
+        console.log("Received VehicleNumber:", vehicleNumber); // Log received name
+        console.log("Received Amount:", amount);
+
+        if (!vehicleNumber) return res.status(400).json({ message: "Please enter a VehicleNumber" });
+        //if (!amount) return res.status(400).json({ message: "Please enter amount" });
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(amount * 100),
+            currency: "INR",
+            payment_method_types: ["card"],
+            metadata: { vehicleNumber },
+            // Include merchantDisplayName in metadata
+        });
+        console.log("PaymentIntent:", paymentIntent);
+        const clientSecret = paymentIntent.client_secret;
+        res.json({ message: "Payment initiated", clientSecret });
+    } catch (err) {
+        console.error("Error creating payment intent:", err); // Log error
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+
 //User requests are forwarded to this router /user
 app.use('/user', gpsRoutes);
 app.use('/vehicle', vehicleRouter);

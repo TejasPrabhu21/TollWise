@@ -14,7 +14,7 @@ const userDataSchema = new mongoose.Schema({
         default: "",
         required: false
     },
-    address: {
+    password: {
         type: String,
         default: "",
         required: false

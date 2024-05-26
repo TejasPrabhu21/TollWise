@@ -9,6 +9,8 @@ import CustomButton from '../../components/CustomButton';
 import FormField from '../../components/FormField';
 // import { useGlobalContext } from "../../context/GlobalProvider";
 import axios from 'axios';
+import { BASE_URL } from "@env"
+
 const SignUp = () => {
     // const { setUser, setIsLogged } = useGlobalContext();
     const navigation = useNavigation();
@@ -20,7 +22,7 @@ const SignUp = () => {
     const submit = async () => {
         try {
             setSubmitting(true);
-            const response = await axios.post('https://smart-toll.onrender.com/user/vehicle', {
+            const response = await axios.post(`${BASE_URL}/user/vehicle`, {
                 registrationNumber: vehicleNumber,
             });
             console.log(response.data);
@@ -39,7 +41,7 @@ const SignUp = () => {
         try {
             setIsLoading(true);
             // Send a signal to the server to send OTP
-            const response = await axios.post('https://smart-toll.onrender.com/user/send-otp', {
+            const response = await axios.post(`${BASE_URL}/user/send-otp`, {
                 phoneNumber: details.PhoneNumber,
             });
             console.log("OTP sent successfully:", response.data);

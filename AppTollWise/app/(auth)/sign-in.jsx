@@ -8,26 +8,27 @@ import FormField from '../../components/FormField';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import { useVehicleContext } from "../contexts/VehicleContext";
+import { BASE_URL } from "@env"
 
 const SignIn = () => {
     const { setUser, setVehicle } = useVehicleContext();
 
     const [form, setForm] = useState({
-        username: '',
-        vehicleNumber: ''
+        vehicleNumber: '',
+        password: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    console.log('Hello');
     const submit = async () => {
-        if (form.username === '' || form.vehicleNumber === '') {
+
+        console.log("Form data:")
+        if (form.vehicleNumber === '' || form.password === '') {
             Alert.alert("Error", "Please fill in all fields");
             return;
         }
 
         setIsSubmitting(true);
-
         try {
-            const response = await axios.post('http://192.168.29.202:3030/user/login', form, {
+            const response = await axios.post(`${BASE_URL}/user/login`, form, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -37,7 +38,7 @@ const SignIn = () => {
             }
             const vehicleNumber = response.data.userDetails.vehicleNumber;
 
-            const responseData = await axios.post('http://192.168.29.202:3030/user/getUserData', { vehicleNumber });
+            const responseData = await axios.post(`${BASE_URL}/user/getUserData`, { vehicleNumber });
             console.log("Login response fetch", responseData);
 
             if (response.data && responseData.data.userDetails !== undefined && responseData.data.vehicleDetails !== undefined) {
@@ -71,20 +72,23 @@ const SignIn = () => {
                         Sign In
                     </Text>
 
-                    <FormField
-                        title="Username"
-                        value={form.username}
-                        handleChangeText={(e) => setForm({ ...form, username: e })}
-                        otherStyles="mt-7"
-                        keyboardType="email-address"
-                    />
 
                     <FormField
-                        title="Password"
+                        title="Vehicle Number"
                         value={form.vehicleNumber}
                         handleChangeText={(e) => setForm({ ...form, vehicleNumber: e })}
                         otherStyles="mt-7"
+                        keyboardType="email-address"
+                        secureTextEntry={false}
                     />
+                    <FormField
+                        title="Password"
+                        value={form.password}
+                        handleChangeText={(e) => setForm({ ...form, password: e })}
+                        otherStyles="mt-7"
+                        secureTextEntry={true}
+                    />
+
 
                     <CustomButton
                         title="Sign In"

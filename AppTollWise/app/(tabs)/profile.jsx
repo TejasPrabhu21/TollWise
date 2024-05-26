@@ -4,6 +4,7 @@ import { useVehicleContext } from '../contexts/VehicleContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from "../../components/Header"
 import CustomButton from '../../components/CustomButton';
+import { BASE_URL } from "@env"
 
 const getInitials = (name) => {
     if (!name) {
@@ -19,12 +20,6 @@ const getInitials = (name) => {
     return inital.toUpperCase();
 }
 
-
-
-function rechargeRedirection() {
-
-}
-
 const profile = () => {
     const { userData, vehicleData } = useVehicleContext();
 
@@ -36,7 +31,9 @@ const profile = () => {
 
     return (
         <SafeAreaView className="flex-1 bg-white">
-            <Header />
+            <View className="px-4">
+                <Header />
+            </View>
             <ScrollView className="flex-1 p-4">
                 <Text className="text-2xl font-bold mb-4 text-center">Profile</Text>
                 {data && (
@@ -71,12 +68,12 @@ const profile = () => {
                                 <Text className="text-lg font-bold mb-4">{vehicleData.PhoneNumber}</Text>
                             </View>
                         )}
-                        <CustomButton
+                        {/*<CustomButton
                             title="Recharge"
                             handlePress={rechargeRedirection}
                             containerStyles="mt-7"
                             isLoading={isSubmitting}
-                        />
+                    />*/}
                     </View>
                 )}
             </ScrollView>

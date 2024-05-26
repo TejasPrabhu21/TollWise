@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const payRouter = express.Router();
 payRouter.use(cors());
+payRouter.use(express.json());
 require('dotenv').config();
 
 
@@ -21,19 +24,26 @@ payRouter.post('/createCustomer', async (req, res) => {
 });
 
 // Endpoint to add funds to wallet
-payRouter.post('/addFunds', async (req, res) => {
+payRouter.post("/pay", async (req, res) => {
     try {
-        const charge = await stripe.charges.create({
-            amount: req.body.amount, // Amount in cents
-            currency: 'inr',
-            customer: req.body.customerId, // Customer ID from your database
-            description: 'Adding funds to wallet',
+        const { VehicleNumber } = req.body; // Destructure merchantDisplayName
+        console.log("Received VehicleNumber:", VehicleNumber); // Log received name
+
+        if (!VehicleNumber) return res.status(400).json({ message: "Please enter a VehicleNumber" });
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(25 * 100),
+            currency: "INR",
+            payment_method_types: ["card"],
+            metadata: { VehicleNumber },
+            // Include merchantDisplayName in metadata
         });
-        // Update wallet balance in your database
-        res.status(200).json(charge);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error adding funds');
+        console.log("PaymentIntent:", paymentIntent);
+        const clientSecret = paymentIntent.client_secret;
+        res.json({ message: "Payment initiated", clientSecret });
+    } catch (err) {
+        console.error("Error creating payment intent:", err); // Log error
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 

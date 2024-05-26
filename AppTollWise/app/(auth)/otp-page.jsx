@@ -10,6 +10,8 @@ import FormField from '../../components/FormField';
 import { useVehicleContext } from "../contexts/VehicleContext";
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { BASE_URL } from "@env"
 
 const OTP = () => {
     const route = useRoute();
@@ -22,11 +24,11 @@ const OTP = () => {
     const confirm = async () => {
         try {
             setSubmitting(true);
-            const response = await axios.post('https://smart-toll.onrender.com/user/verify-otp', {
+            const response = await axios.post(`${BASE_URL}/user/verify-otp`, {
                 otp: OTP,
                 phoneNumber: details.PhoneNumber,
             });
-            const responseData = await axios.post('http://192.168.29.202:3030/user/getUserData', { vehicleNumber: details.RegistrationNumber });
+            const responseData = await axios.post(`${BASE_URL}/user/getUserData`, { vehicleNumber: details.RegistrationNumber });
             console.log('\n\nResponse Data:', response.data);
             if (response.data.success) {
                 // Add vehicle data to global context or create a session
@@ -34,7 +36,7 @@ const OTP = () => {
                 // setVehicle(route.params.details);
                 setUser(responseData.data.userDetails);
                 setVehicle(responseData.data.vehicleDetails)
-                router.replace('/payment-sheet');
+                router.replace('/set-password');
             } else {
                 Alert.alert("Error", "Failed to verify OTP. Please try again.");
             }
@@ -71,6 +73,7 @@ const OTP = () => {
                         handleChangeText={(value) => setOTP(value)}
                         otherStyles="mt-7"
                         keyboardType="numeric"
+                        secureTextEntry={false}
                     />
 
                     <CustomButton

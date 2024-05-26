@@ -29,24 +29,6 @@ router.post('/adduser', (req, res, next) => {
     });
 });
 
-router.post('/login', async (req, res, next) => {
-    const { username, vehicleNumber } = req.body;
-    console.log(req.body);
-    try {
-        const user = await userData.findOne({ username, vehicleNumber });
-
-        if (user) {
-            res.status(200).json({ userDetails: user });
-        } else {
-            res.status(401).json({ message: 'Login failed. Invalid credentials' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-
 //Get vehicle owners details API
 router.post('/vehicle', async (req, res) => {
     try {
@@ -163,6 +145,44 @@ router.post('/verify-otp', async (req, res) => {
     } catch (error) {
         console.error('Error verifying OTP:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.post('/updatepassword', async (req, res) => {
+    const { vehicleNumber, password } = req.body;
+
+    try {
+        const updatedUser = await userData.findOneAndUpdate(
+            { vehicleNumber },
+            { password: password, verified: true },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ balance: updatedUser.balance });
+    } catch (err) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+});
+
+router.post('/login', async (req, res) => {
+    const { vehicleNumber, loginPin } = req.body;
+    console.log(req.body);
+    try {
+        const user = await userData.findOne({ vehicleNumber, loginPin });
+
+        if (user) {
+            res.status(200).json({ userDetails: user });
+        } else {
+            res.status(401).json({ message: 'Login failed. Invalid credentials' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

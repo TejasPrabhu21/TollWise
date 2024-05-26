@@ -3,7 +3,7 @@ import { images } from "../constants";
 
 const Header = () => {
     return (
-        <View className="bg-white px-4 py-2 flex flex-row items-center">
+        <View className="bg-white px-1 py-2 flex flex-row items-center">
             <Image
                 source={images.tollwiselogo}
                 resizeMode='contain'

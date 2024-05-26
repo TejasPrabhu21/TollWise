@@ -13,6 +13,7 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import info from "../assets/icons/info.png";
 import rupee from "../assets/icons/rupee.png";
+import close from "../assets/icons/close.png";
 
 export default {
   play,
@@ -29,5 +30,6 @@ export default {
   eyeHide,
   eye,
   info,
-  rupee
+  rupee,
+  close
 };
