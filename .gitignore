@@ -1,4 +1,7 @@
-/AppTollWise/node_modules
+# Ignore node_modules directories
+/AppTollWise/node_modules/
+/ServerTollWise/node_modules/
 
-/ServerTollWise/node_modules
+# Ignore .env files
+/AppTollWise/.env
 /ServerTollWise/.env
