@@ -162,7 +162,7 @@ For more information, please refer to the project documentation or contact the p
 
 Contributions are welcome! Please fork this repository and submit pull requests.
 
-1. Fork the Project
+1. Fork the Project https://github.com/TejasPrabhu21/TollWise
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
